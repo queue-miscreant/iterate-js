@@ -1,0 +1,26 @@
+<html>
+<head>
+<script src="iterate.js"></script>
+</head>
+<body>
+
+<div id="foo" class="parse-contents">
+foreach _;
+bar
+<div class="baz">
+qux
+</div>
+<div class="baz"></div>
+</div>
+
+
+<script>
+(function() {
+	iterate(['#F00','#0F0','#00F'])[0].forEach(function(each) {
+		each.baz.tag.style.color = each.context
+	})
+})()
+</script>
+
+</body>
+</html>

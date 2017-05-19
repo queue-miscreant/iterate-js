@@ -1,4 +1,4 @@
-_ = (function(context) {
+iterate = (function(context) {
 	var parseClass = "parse-contents"
 
 	var pc = function(tag, context, collapse) {
@@ -46,8 +46,8 @@ _ = (function(context) {
 		for (var i = 0; i < children.length; i++) (function(here){
 			var child = children[i];
 			if (child.classList.contains(parseClass)) {
-				par.pchildren = []
-				pc(child, here.context, par.pchildren)
+				par.nextContext = []
+				pc(child, here.context, par.nextContext)
 				return 
 			}
 
