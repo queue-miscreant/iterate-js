@@ -8,7 +8,8 @@ iterate = (function(context) {
 		var statement = contents.nodeValue.trim();
 		tag.classList.remove(parseClass);
 
-		var lex = statement.match(/foreach ([^;]+)(;(.+))?/)
+		var lex = statement.match(/foreach ([^;]+)(;([\s\S]+))?/)
+
 		if (lex) {
 			var token = lex[1]
 			var content = lex[3]
