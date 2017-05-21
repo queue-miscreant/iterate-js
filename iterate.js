@@ -36,10 +36,12 @@ iterate = (function(context) {
 		}
 	}
 
-	var tree = function(tag, context, par) {
+	var tree = function(tag, context, par, last) {
 		this.tag = tag;
 		this.context = context
 		if (par === undefined) par = this
+		if (last === undefined || (tag.classList.length > 0))
+			last = this
 
 		var classList = [];
 		var children = tag.children;
@@ -47,19 +49,30 @@ iterate = (function(context) {
 		for (var i = 0; i < children.length; i++) (function(here){
 			var child = children[i];
 			if (child.classList.contains(parseClass)) {
-				par.nextContext = []
-				pc(child, here.context, par.nextContext)
+				var nextContext = []
+				pc(child, here.context, nextContext)
+				par.nextContext = nextContext
+				//id contexts, append into preexisting 
+				if (child.id) {
+					var context = par[child.id]
+					if (context === undefined)
+						par[child.id] = nextContext
+					else if (context instanceof Array) {
+						par[child.id] = context.concat(nextContext)
+					}
+					child.id = '';
+				}
 				return 
 			}
 
 			//parse children as a tree if we don't have to parse-contents
-			var select = new tree(child, here.context, par);
+			var select = new tree(child, here.context, par, last);
 			
 			for (var j in child.classList) {
 				var cl = child.classList[j]
 				if (!(1+classList.indexOf(cl))) {
 					classList.push(cl);
-					here[cl] = select
+					last[cl] = select
 				}
 			}
 		})(this)
@@ -75,7 +88,13 @@ iterate = (function(context) {
 			parse[0].id = ""; //remove id so that it won't be cloned
 			pc(parse[0],context,collapse);
 			ret.push(collapse);
-			if (id) ret[id] = collapse
+			//id contexts, append into preexisting 
+			if (id) {
+				if (ret[id] === undefined)
+					ret[id] = collapse
+				else if (ret[id] instanceof Array)
+					ret[id] = ret[id].concat(collapse)
+			}
 
 			parse = document.getElementsByClassName(parseClass);
 		}

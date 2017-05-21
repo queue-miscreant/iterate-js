@@ -43,4 +43,5 @@ in the first `(div.baz)` will be red, green, or blue, in order.
 `iterate`'s returned Array will also contain members for the ID of the 'parse-contents'
 In the above example, it will have the member `foo`, which points to the Array generated
 from `(div#foo.parse-contents)`. This makes it easier to navigate the return value of
-`iterate`
+`iterate`. If there are multiple elements with the same id, then they are combined into
+one array.
